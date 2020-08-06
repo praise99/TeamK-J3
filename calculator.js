@@ -75,17 +75,17 @@ let calculator_buttons = [
     {
         name : "cos",
         symbol : "cos",
-        formula : "trigo(Math.cos,",
+        formula : "Math.cos((3.1415926535899 / 180)*",
         type : "trigo_function"
     },{
         name : "sin",
         symbol : "sin",
-        formula : "trigo(Math.sin,",
+        formula : "Math.sin((3.1415926535899 / 180)*",
         type : "trigo_function"
     },{
         name : "tan",
         symbol : "tan",
-        formula : "trigo(Math.tan,",
+        formula : "Math.tan((3.1415926535899 / 180)*",
         type : "trigo_function"
     },{
         name : "7",
@@ -248,12 +248,23 @@ createCalculatorButtons();
 //Click Event Listener
 input_element.addEventListener('click', event => {
      const target_btn = event.target;
-     
+
      calculator_buttons.forEach(button => {
          if (button.name == target_btn.id) calculator(button);
      })
 })
 
+//Radian to degree function
+function raddeg(ggg){
+    var degg = ggg* Math.PI / 180;
+    return degg;
+}
+
+// Convert the result of asin,acos &atan from radian to degree
+function inv_trigo(funcc, numb){
+    let inv_ = (funcc(numb))*(180/3.1415926535897);
+    return inv_;
+}
 
 //Calculator Function
 
@@ -264,18 +275,19 @@ function calculator(button){
     }else if (button.type == "number"){
         data.operation.push(button.symbol);
         data.formula.push(button.formula);
-    }else if (button.type == "trigo_funstion"){
-        
+    }else if (button.type == "trigo_function"){
+        data.operation.push(button.symbol+"(");
+        data.formula.push(button.formula);
     }else if (button.type == "math_function"){
         let symbol, formula;
-         
-        if(buttton.name == 'factorial'){
+
+        if(button.name == 'factorial'){
             symbol = "!"
             formula = button.formula;
 
             data.operation.push(symbol);
             data.formula.push(formula);
-        }else{
+        }else {
             symbol = button.symbol + "(";
             formula = button.formula + "(";
             data.operation.push(symbol);
@@ -295,7 +307,7 @@ function calculator(button){
 
        let result = eval(formula_str);
        updateOutputResult(result);
-        
+
     }
       updateOutputOperation(data.operation.join(''));
 }
@@ -325,4 +337,4 @@ function gamma(n) {  // accurate to about 15 decimal places
       var t = n + g + 0.5;
       return Math.sqrt(2 * Math.PI) * Math.pow(t, (n + 0.5)) * Math.exp(-t) * x;
     }
-}
+} 
